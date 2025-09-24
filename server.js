@@ -10,12 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// test route
+// ✅ Test route
 app.get("/", (req, res) => {
   res.send("StudyMate backend is running 🚀");
 });
 
-// test db connection
+// ✅ Test DB connection
 app.get("/db-check", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
@@ -26,10 +26,11 @@ app.get("/db-check", async (req, res) => {
   }
 });
 
-// ✅ mount auth routes
+// ✅ Auth routes
 app.use("/api/auth", authRoutes);
 
+// Listen on Render’s port (process.env.PORT) and all interfaces
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });

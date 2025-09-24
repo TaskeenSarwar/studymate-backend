@@ -10,13 +10,19 @@ export default function SignupScreen({ navigation }) {
 
   const handleSignup = async () => {
     try {
-const BASE_URL = "http://192.168.18.29:5000"; // your PC's local IP
-await axios.post(`${BASE_URL}/api/auth/signup`, { name, email, password, mbti }, {
-  headers: { "Content-Type": "application/json" }
-});
+      // ✅ Use signup endpoint, not login
+      //const BASE_URL = "http://192.168.18.29:5000"; // your PC's local IP
+     const BASE_URL = 'https://studymate-backend-8f8g.onrender.com';
+      await axios.post(
+        `${BASE_URL}/api/auth/signup`,
+        { name, email, password, mbti },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
       alert("Signup successful! Please login.");
       navigation.navigate("Login");
     } catch (err) {
+      console.error("Signup error:", err.response?.data || err.message);
       alert(err.response?.data?.error || "Signup failed");
     }
   };
@@ -24,10 +30,37 @@ await axios.post(`${BASE_URL}/api/auth/signup`, { name, email, password, mbti },
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
-      <TextInput style={styles.input} placeholder="Full Name" value={name} onChangeText={setName} />
-      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} />
-      <TextInput style={styles.input} placeholder="MBTI (e.g. INTP)" value={mbti} onChangeText={setMbti} />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Full Name"
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="MBTI (e.g. INTP)"
+        value={mbti}
+        autoCapitalize="characters"
+        maxLength={4}
+        onChangeText={setMbti}
+      />
+
       <TouchableOpacity style={styles.button} onPress={handleSignup}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
@@ -38,8 +71,21 @@ await axios.post(`${BASE_URL}/api/auth/signup`, { name, email, password, mbti },
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-  input: { width: "80%", padding: 10, borderWidth: 1, borderColor: "#ccc", borderRadius: 10, marginBottom: 15 },
-  button: { width: "80%", padding: 15, backgroundColor: "#50C878", borderRadius: 10, alignItems: "center" },
+  input: {
+    width: "80%",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: "#f9f9f9",
+  },
+  button: {
+    width: "80%",
+    padding: 15,
+    backgroundColor: "#50C878",
+    borderRadius: 10,
+    alignItems: "center",
+  },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
 });
- 
